@@ -13,14 +13,19 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+        with:
+          egress-policy: audit
+
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
         with:
           fetch-depth: 0
 
       - name: Get changed files
         id: changed_files
-        uses: tj-actions/changed-files@v47
+        uses: step-security/changed-files@60967b822d3001fa82242f8d6b4ed46bc3600a68 # v47.0.1
         with:
           files: python/agents/**
 
@@ -84,12 +89,17 @@ jobs:
         include: ${{ fromJson(needs.discover-changed-agents.outputs.matrix) }}
 
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+        with:
+          egress-policy: audit
+
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v3'
+        uses: step-security/google-github-auth@57c51210cb4d85d8a5d39dc4c576c79bd693f914 # v3.0.1
         with:
           workload_identity_provider: 'projects/628595556591/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
           create_credentials_file: true
@@ -97,7 +107,7 @@ jobs:
       
       # --- RUN THE TEMPLATE GENERATION AND TESTING USING CONTAINER ---
       - name: ${{ matrix.task }} - ${{ matrix.agent_path }} (${{ matrix.deployment_target }})
-        uses: docker://europe-west4-docker.pkg.dev/production-ai-template/starter-pack/e2e-tests
+        uses: docker://europe-west4-docker.pkg.dev/production-ai-template/starter-pack/e2e-tests:latest@sha256:c6686232c1e3141d4a962d3d618457326e7de3b89ba0603495ec6cd636cc570a
         continue-on-error: ${{ matrix.task == 'lint' }}
         with:
           entrypoint: /bin/bash

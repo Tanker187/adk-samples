@@ -16,16 +16,21 @@ jobs:
     name: Ruff Format & Lint Suggestions
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+        with:
+          egress-policy: audit
+
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        uses: step-security/setup-uv@ccf0a26ce9117d9e99292b0ce953ea5d9ffe778e # v7.3.0
         with:
           python-version: "3.13"
     
       - name: Install Reviewdog
-        uses: reviewdog/action-setup@v1
+        uses: step-security/reviewdog-action-setup@34978e80c2c2b35bc0faf32a6dd993fd7dadc7ba # v1.4.0
         with:
           reviewdog_version: latest
 
