@@ -1,4 +1,4 @@
-FROM maven:3.8-openjdk-17 AS builder
+FROM maven:3.8-openjdk-17@sha256:3a9c30b3af6278a8ae0007d3a3bf00fff80ec3ed7ae4eb9bfa1772853101549b AS builder
 
 WORKDIR /app
 
