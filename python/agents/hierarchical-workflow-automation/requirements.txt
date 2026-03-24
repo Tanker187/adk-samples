@@ -96,7 +96,7 @@ opentelemetry-instrumentation==0.57b0
 opentelemetry-resourcedetector-gcp==1.9.0a0
 opentelemetry-sdk==1.36.0
 opentelemetry-semantic-conventions==0.57b0
-orjson==3.11.3
+orjson==3.11.6
 ormsgpack==1.10.0
 packaging==25.0
 paho-mqtt==2.1.0
